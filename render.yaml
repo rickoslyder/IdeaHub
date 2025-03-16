@@ -39,7 +39,7 @@ services:
     name: idea-hub-web
     runtime: node
     plan: starter
-    buildCommand: yarn && yarn workspace @idea-hub/web add -D @vitejs/plugin-react vite tailwindcss postcss autoprefixer && yarn workspace @idea-hub/web build:render
+    buildCommand: yarn && yarn workspace @idea-hub/web build:render
     startCommand: cd apps/web && node server.js
     envVars:
       - key: NODE_ENV
