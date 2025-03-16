@@ -1,8 +1,11 @@
 import express from "express";
+import type { Request, Response } from "express-serve-static-core";
 import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import dotenv from "dotenv";
+import projectRoutes from "./routes/projectRoutes.js";
+import githubRoutes from "./routes/githubRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -24,15 +27,10 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to Idea Hub API" });
 });
 
-// Import route modules
-// We'll add these after we update them to use ESM
-// import developmentRoutes from './routes/developments.js';
-// import projectRoutes from './routes/projects.js';
-// import relevanceRoutes from './routes/relevance.js';
-
 // Apply routes
+app.use("/api/projects", projectRoutes);
+app.use("/api/github", githubRoutes);
 // app.use('/api/developments', developmentRoutes);
-// app.use('/api/projects', projectRoutes);
 // app.use('/api/relevance', relevanceRoutes);
 
 // Start server

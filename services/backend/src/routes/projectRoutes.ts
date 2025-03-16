@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express from "express";
 import {
   getAllProjects,
   getProjectById,
@@ -7,7 +7,7 @@ import {
   deleteProject,
 } from "../controllers/projectController.js";
 
-const router = Router();
+const router = express.Router();
 
 // GET all projects
 router.get("/", getAllProjects);

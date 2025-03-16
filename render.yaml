@@ -5,8 +5,8 @@ services:
     name: idea-hub-backend
     runtime: node
     plan: starter
-    buildCommand: yarn && yarn workspace @idea-hub/shared build && yarn workspace @idea-hub/backend build
-    startCommand: cd services/backend && node server.js
+    buildCommand: yarn && yarn workspace @idea-hub/shared build && yarn workspace @idea-hub/backend build:deploy
+    startCommand: cd services/backend && node dist/index.js
     envVars:
       - key: NODE_ENV
         value: production

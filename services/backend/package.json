@@ -5,6 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "build:deploy": "tsc -p tsconfig.build.json",
+    "build:verbose": "tsc --traceResolution",
+    "check-imports": "node --check src/server.ts",
     "start": "node dist/index.js",
     "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node src/index.ts",
     "test": "jest"
@@ -27,9 +30,9 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/node": "^20.11.25",
-    "@types/uuid": "^9.0.8",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "@types/uuid": "^10.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

@@ -1,3 +1,4 @@
+// Import types from express-serve-static-core for ESM compatibility
 import { Request, Response } from "express";
 import { Project } from "../models/index.js";
 import { v4 as uuidv4 } from "uuid";
