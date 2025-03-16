@@ -69,5 +69,5 @@ services:
 # Database
 databases:
   - name: idea-hub-db
-    plan: starter
+    instance_type: basic-256mb
     ipAllowList: [] # Only allow internal connections 
