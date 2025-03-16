@@ -3,4 +3,6 @@ node_modules
 .env
 **/.env
 **/.env.local
+**/dist
 zilliz-cloud-IdeaHub-username-password.txt
+package-lock.json

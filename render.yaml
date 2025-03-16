@@ -39,7 +39,7 @@ services:
     name: idea-hub-web
     runtime: node
     plan: starter
-    buildCommand: yarn && yarn workspace @idea-hub/web add -D @tailwindcss/postcss tailwindcss@latest postcss@latest autoprefixer@latest && yarn workspace @idea-hub/web build
+    buildCommand: yarn && yarn workspace @idea-hub/web add -D @tailwindcss/postcss tailwindcss postcss autoprefixer && yarn workspace @idea-hub/web build
     startCommand: cd apps/web && node server.js
     envVars:
       - key: NODE_ENV
