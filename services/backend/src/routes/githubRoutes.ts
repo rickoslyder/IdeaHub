@@ -1,4 +1,5 @@
 import express from "express";
+import type { Request, Response } from "express";
 import githubService from "../services/githubService.js";
 
 const router = express.Router();
@@ -7,7 +8,7 @@ const router = express.Router();
  * @route GET /api/github/repo
  * @desc Get repository metadata from GitHub URL
  */
-router.get("/repo", async (req, res) => {
+router.get("/repo", async (req: Request, res: Response) => {
   try {
     const { url } = req.query;
 
@@ -37,7 +38,7 @@ router.get("/repo", async (req, res) => {
  * @route GET /api/github/commits
  * @desc Get latest commits from GitHub repository
  */
-router.get("/commits", async (req, res) => {
+router.get("/commits", async (req: Request, res: Response) => {
   try {
     const { url, limit } = req.query;
 

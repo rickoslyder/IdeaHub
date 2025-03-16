@@ -3,6 +3,8 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "noEmitOnError": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "emitDeclarationOnly": false,
+    "noEmit": false
   }
 } 
