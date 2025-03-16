@@ -7,7 +7,6 @@ export default defineConfig({
   // Skip TypeScript checks during build
   esbuild: {
     jsx: "react",
-    jsxInject: `import React from 'react'`,
   },
   build: {
     // Ensure we don't fail on TS errors

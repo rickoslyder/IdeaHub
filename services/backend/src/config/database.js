@@ -1,8 +1,14 @@
 import { Sequelize } from "sequelize-typescript";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 // Load environment variables
 dotenv.config();
+
+// Create __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Debug logs for database configuration
 console.log("Starting database configuration");
@@ -45,6 +51,10 @@ if (process.env.RENDER_DB_SERVICE_HOSTNAME) {
   );
 }
 
+// Construct the models path using join for cross-platform compatibility
+const modelsPath = join(__dirname, "..", "models");
+console.log(`Models path: ${modelsPath}`);
+
 // Database configuration
 let sequelize;
 
@@ -64,7 +74,7 @@ if (process.env.DATABASE_URL) {
             }
           : false,
     },
-    models: [__dirname + "/../models"],
+    models: [modelsPath],
   });
   // Then, try the explicit Render internal URL
 } else if (process.env.RENDER_DB_SERVICE_INTERNAL_DB_URL) {
@@ -82,7 +92,7 @@ if (process.env.DATABASE_URL) {
             }
           : false,
     },
-    models: [__dirname + "/../models"],
+    models: [modelsPath],
   });
   // Finally, try to build a connection string from individual components
 } else if (
@@ -112,7 +122,7 @@ if (process.env.DATABASE_URL) {
             }
           : false,
     },
-    models: [__dirname + "/../models"],
+    models: [modelsPath],
   });
   // Fall back to local development database
 } else {
@@ -123,7 +133,7 @@ if (process.env.DATABASE_URL) {
     host: "localhost",
     dialect: "postgres",
     logging: false,
-    models: [__dirname + "/../models"],
+    models: [modelsPath],
   });
 }
 
