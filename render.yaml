@@ -24,7 +24,7 @@ services:
     name: idea-hub-web
     runtime: node
     plan: starter
-    buildCommand: yarn && yarn workspace @idea-hub/web build
+    buildCommand: yarn && yarn workspace @idea-hub/web build:render
     startCommand: cd apps/web && node server.js
     envVars:
       - key: NODE_ENV
@@ -64,10 +64,10 @@ services:
       - key: AI_SERVICE_URL
         value: https://idea-hub-ai-service.onrender.com
       - key: CLERK_SECRET_KEY
-        sync: false # This tells Render to prompt for this value during deployment
+        sync: false # This tells Render to prompt for the value during deployment
 
 # Database
 databases:
   - name: idea-hub-db
-    plan: basic-256mb
+    plan: starter
     ipAllowList: [] # Only allow internal connections 
