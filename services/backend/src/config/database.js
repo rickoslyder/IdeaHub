@@ -7,9 +7,24 @@ dotenv.config();
 // Database configuration
 let sequelize;
 
+console.log("Database configuration starting...");
+console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
+console.log("NODE_ENV:", process.env.NODE_ENV);
+
 // Check if Render's DATABASE_URL is available
 if (process.env.DATABASE_URL) {
-  console.log("Using Render PostgreSQL database");
+  console.log("Using Render PostgreSQL database with DATABASE_URL");
+
+  // Log a sanitized version of the URL (hiding credentials)
+  try {
+    const dbUrlObj = new URL(process.env.DATABASE_URL);
+    console.log(
+      `Database host: ${dbUrlObj.hostname}, database name: ${dbUrlObj.pathname.substring(1)}`
+    );
+  } catch (e) {
+    console.log("Could not parse DATABASE_URL");
+  }
+
   // Use Render's DATABASE_URL
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: "postgres",
@@ -17,6 +32,21 @@ if (process.env.DATABASE_URL) {
       ssl: {
         require: true,
         rejectUnauthorized: false, // Needed for Render PostgreSQL
+      },
+    },
+    logging: process.env.NODE_ENV === "development" ? console.log : false,
+  });
+} else if (process.env.RENDER_DB_SERVICE_INTERNAL_DB_URL) {
+  // Fallback to the explicit RENDER_DB_SERVICE_INTERNAL_DB_URL from .env if DATABASE_URL isn't set
+  console.log("Falling back to RENDER_DB_SERVICE_INTERNAL_DB_URL");
+
+  // Use the explicit Render URL from .env
+  sequelize = new Sequelize(process.env.RENDER_DB_SERVICE_INTERNAL_DB_URL, {
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
     },
     logging: process.env.NODE_ENV === "development" ? console.log : false,

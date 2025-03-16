@@ -14,6 +14,19 @@ services:
         fromDatabase:
           name: idea-hub-db
           property: connectionString
+      # Explicit database connection variables as fallback
+      - key: RENDER_DB_SERVICE_HOSTNAME
+        value: dpg-cvb1tq2j1k6c7392iva0-a
+      - key: RENDER_DB_SERVICE_PORT
+        value: 5432
+      - key: RENDER_DB_SERVICE_USER
+        value: idea_hub_db_user
+      - key: RENDER_DB_SERVICE_PASSWORD
+        sync: false # Will prompt during deployment
+      - key: RENDER_DB_SERVICE_DATABASE
+        value: idea_hub_db
+      - key: RENDER_DB_SERVICE_INTERNAL_DB_URL
+        value: postgresql://idea_hub_db_user:${RENDER_DB_SERVICE_PASSWORD}@dpg-cvb1tq2j1k6c7392iva0-a/idea_hub_db
       - key: AI_SERVICE_URL
         value: https://idea-hub-ai-service.onrender.com
       - key: CLERK_SECRET_KEY
@@ -24,7 +37,7 @@ services:
     name: idea-hub-web
     runtime: node
     plan: starter
-    buildCommand: yarn && yarn add -W vite && yarn workspace @idea-hub/web build:render
+    buildCommand: yarn && yarn workspace @idea-hub/web install && yarn workspace @idea-hub/web build:render
     startCommand: cd apps/web && node server.js
     envVars:
       - key: NODE_ENV
@@ -61,6 +74,19 @@ services:
         fromDatabase:
           name: idea-hub-db
           property: connectionString
+      # Explicit database connection variables as fallback
+      - key: RENDER_DB_SERVICE_HOSTNAME
+        value: dpg-cvb1tq2j1k6c7392iva0-a
+      - key: RENDER_DB_SERVICE_PORT
+        value: 5432
+      - key: RENDER_DB_SERVICE_USER
+        value: idea_hub_db_user
+      - key: RENDER_DB_SERVICE_PASSWORD
+        sync: false # Will prompt during deployment
+      - key: RENDER_DB_SERVICE_DATABASE
+        value: idea_hub_db
+      - key: RENDER_DB_SERVICE_INTERNAL_DB_URL
+        value: postgresql://idea_hub_db_user:${RENDER_DB_SERVICE_PASSWORD}@dpg-cvb1tq2j1k6c7392iva0-a/idea_hub_db
       - key: AI_SERVICE_URL
         value: https://idea-hub-ai-service.onrender.com
       - key: CLERK_SECRET_KEY
