@@ -1,6 +1,9 @@
 import sequelize from "./config/database.js";
 import app from "./server.js";
 
+// Set port from environment or default
+const PORT = process.env.PORT || 3000;
+
 // Connect to the database and start the server
 async function bootstrap() {
   try {
@@ -26,7 +29,25 @@ async function bootstrap() {
       // Continue startup even if DB sync fails
     }
 
-    // Server is already started in server.ts
+    // Explicitly start server
+    const server = app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server is running on port ${PORT} and bound to 0.0.0.0`);
+      console.log(`Server listening at http://0.0.0.0:${PORT}`);
+    });
+
+    // Log server address information for debugging
+    setTimeout(() => {
+      // Check the server address
+      const serverAddress = server.address();
+      if (serverAddress && typeof serverAddress !== "string") {
+        console.log(
+          `Server address info - Port: ${serverAddress.port}, Address: ${serverAddress.address}, Family: ${serverAddress.family}`
+        );
+      } else {
+        console.log(`Server address: ${serverAddress}`);
+      }
+    }, 1000);
+
     console.log("Application initialized successfully");
   } catch (error) {
     console.error("Error initializing application:", error);
