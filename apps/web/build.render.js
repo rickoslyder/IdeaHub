@@ -1,51 +1,99 @@
 #!/usr/bin/env node
 
 import { execSync } from "child_process";
-import fs from "fs";
-import path from "path";
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import fs from "fs";
 
-// Get the directory path of the current file
+// Get the directory path and create a require function that works in ESM
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
 
-// The main function to run the build process
+// Debug function to explore the environment
+function debugEnvironment() {
+  console.log("🔍 DEBUG: Current directory:", process.cwd());
+  console.log("🔍 DEBUG: Script directory:", __dirname);
+  console.log("🔍 DEBUG: NODE_PATH:", process.env.NODE_PATH);
+  console.log("🔍 DEBUG: PATH:", process.env.PATH);
+
+  // Check if node_modules exists
+  const nodeModulesPath = join(__dirname, "node_modules");
+  console.log(
+    `🔍 DEBUG: node_modules exists: ${fs.existsSync(nodeModulesPath)}`
+  );
+
+  // List node_modules/tailwindcss if it exists
+  const tailwindPath = join(nodeModulesPath, "tailwindcss");
+  if (fs.existsSync(tailwindPath)) {
+    console.log(
+      `🔍 DEBUG: tailwindcss folder contents:`,
+      fs.readdirSync(tailwindPath).slice(0, 5),
+      "..."
+    );
+  }
+
+  // List node_modules/vite if it exists
+  const vitePath = join(nodeModulesPath, "vite");
+  if (fs.existsSync(vitePath)) {
+    console.log(
+      `🔍 DEBUG: vite folder contents:`,
+      fs.readdirSync(vitePath).slice(0, 5),
+      "..."
+    );
+  }
+}
+
 async function runBuild() {
   console.log("⚙️ Starting Render build process...");
 
   try {
-    // Ensure Tailwind CSS and related dependencies are installed
-    console.log("📦 Installing CSS dependencies...");
-    execSync("npm install -g tailwindcss postcss autoprefixer", {
-      stdio: "inherit",
-      cwd: __dirname,
-    });
+    // Debug the environment before making changes
+    debugEnvironment();
 
-    console.log("📦 Installing local CSS dependencies...");
-    execSync("npm install tailwindcss postcss autoprefixer", {
-      stdio: "inherit",
-      cwd: __dirname,
-    });
+    // Install dependencies using yarn directly (more reliable in workspace context)
+    console.log("📦 Installing dependencies with yarn...");
+    execSync(
+      "yarn add tailwindcss postcss autoprefixer vite @vitejs/plugin-react --dev",
+      {
+        stdio: "inherit",
+        cwd: __dirname,
+      }
+    );
 
-    // Check that tailwindcss was installed
-    try {
-      const tailwindPath = require.resolve("tailwindcss", {
-        paths: [__dirname],
+    // Debug after installation
+    debugEnvironment();
+
+    // Create a simple inline vite config file to avoid import issues
+    const tempViteConfigPath = join(__dirname, "vite.temp.js");
+    fs.writeFileSync(
+      tempViteConfigPath,
+      `
+      import { defineConfig } from 'vite';
+      import react from '@vitejs/plugin-react';
+      
+      export default defineConfig({
+        plugins: [react()],
+        build: {
+          minify: true,
+          sourcemap: false,
+          target: "esnext",
+          outDir: "dist",
+        },
       });
-      console.log(`✅ Tailwind CSS found at: ${tailwindPath}`);
-    } catch (error) {
-      console.error(
-        "❌ Tailwind CSS not found in node_modules. This may cause build issues."
-      );
-      console.error(error);
-    }
+    `
+    );
 
-    // Run the build command
-    console.log("🏗️ Running build with Vite...");
-    execSync("npx vite build --config vite.config.render.js", {
+    // Run vite directly with the temporary config
+    console.log("🏗️ Running vite build with inline config...");
+    execSync("yarn vite build --config vite.temp.js", {
       stdio: "inherit",
       cwd: __dirname,
     });
+
+    // Clean up temporary config
+    fs.unlinkSync(tempViteConfigPath);
 
     console.log("✅ Build completed successfully!");
   } catch (error) {
