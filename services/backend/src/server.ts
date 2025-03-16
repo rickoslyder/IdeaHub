@@ -33,9 +33,10 @@ app.use("/api/github", githubRoutes);
 // app.use('/api/developments', developmentRoutes);
 // app.use('/api/relevance', relevanceRoutes);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start server - modified to explicitly log binding to all interfaces
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT} and bound to all interfaces`);
+  console.log(`Server listening at http://0.0.0.0:${PORT}`);
 });
 
 export default app;
