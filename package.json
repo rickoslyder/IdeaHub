@@ -1,0 +1,28 @@
+{
+  "name": "idea-hub",
+  "version": "1.0.0",
+  "description": "A desktop application for managing and visualizing personal projects with AI-powered relevance matching",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "yarn workspaces run start",
+    "build": "yarn workspaces run build",
+    "test": "yarn workspaces run test"
+  },
+  "keywords": [
+    "idea",
+    "project-management",
+    "AI",
+    "embeddings",
+    "relevance-matching"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

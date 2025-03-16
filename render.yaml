@@ -1,0 +1,73 @@
+# Render deployment configuration
+services:
+  # Backend API service
+  - type: web
+    name: idea-hub-backend
+    runtime: node
+    plan: starter
+    buildCommand: yarn && yarn workspace @idea-hub/shared build && yarn workspace @idea-hub/backend build
+    startCommand: cd services/backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: idea-hub-db
+          property: connectionString
+      - key: AI_SERVICE_URL
+        value: https://idea-hub-ai-service.onrender.com
+      - key: CLERK_SECRET_KEY
+        sync: false # This tells Render to prompt for the value during deployment
+
+  # Web app service
+  - type: web
+    name: idea-hub-web
+    runtime: node
+    plan: starter
+    buildCommand: yarn && yarn workspace @idea-hub/web build
+    startCommand: cd apps/web && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BACKEND_URL
+        value: https://idea-hub-backend.onrender.com
+      - key: VITE_CLERK_PUBLISHABLE_KEY
+        value: pk_test_bWFnaWNhbC13ZWFzZWwtNDQuY2xlcmsuYWNjb3VudHMuZGV2JA
+
+  # AI Service (Python + FastAPI)
+  - type: web
+    name: idea-hub-ai-service
+    runtime: python
+    plan: starter
+    buildCommand: cd services/ai && pip install -r requirements.txt
+    startCommand: cd services/ai && uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MILVUS_URL
+        value: https://idea-hub-milvus-proxy.onrender.com
+
+  # Background worker for compute-intensive tasks
+  - type: worker
+    name: idea-hub-worker
+    runtime: node
+    plan: starter
+    buildCommand: yarn && yarn workspace @idea-hub/shared build
+    startCommand: cd services/backend && node worker.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: idea-hub-db
+          property: connectionString
+      - key: AI_SERVICE_URL
+        value: https://idea-hub-ai-service.onrender.com
+      - key: CLERK_SECRET_KEY
+        sync: false # This tells Render to prompt for this value during deployment
+
+# Database
+databases:
+  - name: idea-hub-db
+    plan: starter
+    ipAllowList: [] # Only allow internal connections 

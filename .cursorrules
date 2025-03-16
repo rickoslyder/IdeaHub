@@ -1,0 +1,117 @@
+Below is an optimal set of **Cursor project rules** tailored for the "Idea Hub" app. These rules are designed to guide Cursor, an AI-powered code editor, in understanding the project’s structure, technologies, and conventions, enabling it to provide accurate and context-aware coding assistance. The rules cover the app’s various components—desktop app, web app, backend, AI service, and databases—while ensuring consistency, security, and performance.
+
+---
+
+### **Cursor Project Rules for Idea Hub**
+
+#### **1. Technology Stack**
+- **Desktop App**: Electron + React + TypeScript
+  - For building a cross-platform desktop application with a modern frontend.
+- **Web App**: React + TypeScript
+  - For a mobile-accessible web interface.
+- **Backend**: Node.js + Express + TypeScript
+  - For a scalable server handling API requests and data syncing.
+- **AI Service**: Python + FastAPI
+  - For AI tasks like embedding generation and prompt creation.
+- **Databases**:
+  - **PostgreSQL**: Relational data storage (e.g., projects, users).
+  - **Milvus**: Vector database for storing and searching embeddings.
+
+#### **2. Directory Structure**
+- **`/apps/desktop`**: Desktop app code (Electron + React).
+- **`/apps/web`**: Web app code (React).
+- **`/services/backend`**: Backend API code (Node.js + Express).
+- **`/services/ai`**: AI service code (Python + FastAPI).
+- **`/packages/shared`**: Shared utilities, types, or components across the project.
+
+#### **3. Coding Standards**
+- Use **TypeScript** with strict type checking for all JavaScript code.
+- Enforce **ESLint** and **Prettier** for consistent code style (e.g., indentation, naming).
+- Write modular, reusable code with clear, descriptive names for functions and variables.
+- Prefer **asynchronous programming** (e.g., `async/await`) for I/O operations.
+
+#### **4. Frontend Guidelines (Desktop & Web)**
+- Use **React functional components** with **hooks** for state management.
+- Style with **Tailwind CSS** for a clean, minimalistic design.
+- Use **Axios** for API requests to the backend.
+- Ensure **responsive design** for the web app.
+- For the desktop app:
+  - Use Electron’s Node.js APIs for file system access (e.g., syncing local folders).
+  - Set up file watchers with the **`chokidar`** library to monitor local changes.
+
+#### **5. Backend Guidelines**
+- Use **Express** for routing and middleware.
+- Structure code with:
+  - **`/routes`**: API route definitions.
+  - **`/controllers`**: Request handling logic.
+  - **`/services`**: Business logic and external integrations.
+- Use **Sequelize** for PostgreSQL interactions (e.g., models, queries).
+- Use the **Milvus Node.js SDK** for vector database operations.
+- Build **RESTful APIs** with proper HTTP status codes (e.g., 200, 404, 500).
+- Implement **JWT** for authentication and authorization.
+- Call the AI service via HTTP for AI-related tasks (e.g., embedding generation).
+
+#### **6. AI Service Guidelines**
+- Use **FastAPI** to create efficient API endpoints.
+- Load AI models with **Hugging Face Transformers** and cache them for reuse.
+- Provide endpoints for:
+  - Generating embeddings from text inputs.
+  - Creating AI prompts based on project data.
+- Optimize with **batching** (process multiple inputs at once) and **caching** (store frequently used results).
+
+#### **7. Database Guidelines**
+- Define **PostgreSQL schemas** with Sequelize for relational data (e.g., projects, users).
+- Use **Milvus collections** to store embeddings for similarity search.
+- Implement efficient indexing and querying for both databases.
+- Ensure data consistency with transactions where needed.
+
+#### **8. Security**
+- **Sanitize all user inputs** to prevent injection attacks (e.g., SQL injection, XSS).
+- Use **HTTPS** for all external communications.
+- Store sensitive data (e.g., passwords, tokens) securely with encryption or hashing.
+- Apply **rate limiting** to APIs to prevent abuse.
+- Enforce **access controls** for collaboration features (e.g., project sharing, commenting).
+
+#### **9. Testing**
+- Write **unit tests** for critical components:
+  - Use **Jest** for JavaScript/TypeScript (e.g., frontend, backend).
+  - Use **Pytest** for Python (e.g., AI service).
+- Test key functionalities like API endpoints, AI tasks, and database operations.
+
+#### **10. Performance**
+- Optimize AI tasks with **batching** and **caching** to reduce computation time.
+- Use **cosine similarity** for relevance matching in Milvus searches.
+- Ensure efficient database queries (e.g., indexed fields, optimized joins).
+
+#### **11. Environment and Configuration**
+- Use **`.env` files** for environment-specific settings (e.g., API keys, database URLs).
+- Avoid hardcoding sensitive information in the codebase.
+- Support separate configurations for development, staging, and production.
+
+#### **12. Logging and Error Handling**
+- Use **Winston** for logging in Node.js and Python’s **logging module** in the AI service.
+- Log errors with stack traces for debugging.
+- Return user-friendly error messages with appropriate status codes.
+
+#### **13. AI-Specific Guidelines**
+- Use open-source models (e.g., E5, BGE) for generating embeddings.
+- Store embeddings in Milvus and search with **cosine similarity**.
+- Generate prompts using customizable templates that include:
+  - Project context.
+  - Development details.
+  - Specific tasks or questions.
+
+#### **14. Collaboration Features**
+- Implement **permission checks** for actions like viewing, editing, or commenting on projects.
+- Use a role-based system to manage user access (e.g., owner, collaborator).
+
+---
+
+### **How These Rules Help Cursor**
+These rules provide Cursor with a clear understanding of:
+- **Where to Look**: The directory structure separates concerns, so Cursor knows which technologies and conventions apply to each file.
+- **What to Suggest**: Specific libraries (e.g., Axios, Sequelize) and patterns (e.g., RESTful APIs, React hooks) guide Cursor’s code completions.
+- **How to Enforce Consistency**: Coding standards and security rules ensure uniform, safe code across the project.
+- **Context for AI Features**: Guidelines for embeddings, prompts, and similarity search help Cursor assist with these specialized tasks.
+
+By following these rules, Cursor can offer precise, relevant suggestions, making development of "Idea Hub" faster and more efficient. If the tech stack or requirements evolve, these rules can be adjusted accordingly.
