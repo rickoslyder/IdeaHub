@@ -39,7 +39,7 @@ services:
     name: idea-hub-web
     runtime: node
     plan: starter
-    buildCommand: yarn && cd apps/web && yarn add -D vite@5.0.5 @vitejs/plugin-react@4.2.1 tailwindcss@4.0.14 @tailwindcss/vite@4.0.14 && yarn build:skipTypeCheck
+    buildCommand: yarn && cd apps/web && yarn add -D vite@5.0.5 @vitejs/plugin-react@4.2.1 tailwindcss@4.0.14 @tailwindcss/vite@4.0.14 && NODE_ENV=production yarn build:skipTypeCheck
     startCommand: cd apps/web && node server.js
     envVars:
       - key: NODE_ENV

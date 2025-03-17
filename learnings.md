@@ -490,4 +490,18 @@ return res.json(repoMetadata);
   1. Always verify package versions exist before specifying them
   2. Use package version commands (`npm view [package] versions`) to check available versions
   3. For rapidly evolving packages, it's safer to use exact versions rather than semver ranges
-  4. Keep dependencies in sync between local development and deployment environments 
+  4. Keep dependencies in sync between local development and deployment environments
+
+### Issue: Tailwind v4 Color Configuration
+- **Problem**: Error "Cannot apply unknown utility class: text-neutral-800" despite the neutral colors being defined in the Tailwind config.
+- **Cause**: In Tailwind v4, the theme configuration was modified in a way that requires explicitly defining base colors like white, black, and transparent.
+- **Solution**:
+  1. Updated tailwind.config.js to explicitly define base colors at the root level of the theme.colors object
+  2. Added white, black, transparent, and current for default color support
+  3. Moved custom colors into the same level, rather than the extend section
+  4. Set NODE_ENV=production in the render.yaml build command to ensure proper production mode
+- **Learnings**:
+  1. Tailwind v4 requires more explicit color definitions than v3
+  2. When migrating from v3 to v4, check both the color names AND the configuration structure
+  3. Default/base colors must be explicitly defined when overriding the colors object
+  4. The build environment can affect how Tailwind processes configuration 
