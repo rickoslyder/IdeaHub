@@ -504,4 +504,38 @@ return res.json(repoMetadata);
   1. Tailwind v4 requires more explicit color definitions than v3
   2. When migrating from v3 to v4, check both the color names AND the configuration structure
   3. Default/base colors must be explicitly defined when overriding the colors object
-  4. The build environment can affect how Tailwind processes configuration 
+  4. The build environment can affect how Tailwind processes configuration
+
+### Issue: Tailwind CSS extend vs root level configuration
+- **Problem**: Tailwind CSS build process recognizes utility classes locally but fails during production build on Render.
+- **Cause**: 
+  1. Production build environments can be stricter about configuration
+  2. Using `theme.colors` replaces all default colors, while `theme.extend.colors` adds to them
+  3. The Tailwind VIte plugin may not find the config file in production builds
+- **Solution**:
+  1. Used `theme.extend.colors` instead of `theme.colors` to preserve all default colors
+  2. Explicitly specified the config file path in the Tailwind Vite plugin
+  3. Added `TAILWIND_MODE=build` environment variable for production builds
+- **Learnings**:
+  1. Always use `theme.extend` for custom colors unless you intentionally want to replace all defaults
+  2. Explicitly specify config paths in plugins for production environments
+  3. Set proper environment variables (`TAILWIND_MODE=build` and `NODE_ENV=production`) 
+  4. When in doubt, simplify the configuration and let Tailwind's defaults handle most cases 
+
+### Issue: Tailwind CSS utilities in @apply directives
+- **Problem**: Tailwind CSS fails to recognize utility classes used in @apply directives within CSS files during production builds.
+- **Cause**: 
+  1. When using @apply with custom colors in CSS files, the purge process may not correctly identify them as used
+  2. This is particularly problematic in production builds where optimization is more aggressive
+  3. The issue is exacerbated with Tailwind v4's stricter processing of utility classes
+- **Solution**:
+  1. Removed all @apply directives from the CSS and replaced them with standard CSS properties
+  2. Used direct CSS values (like `font-weight: 600;` instead of `@apply font-semibold`)
+  3. Added comments to show the Tailwind equivalent for maintainability
+  4. Used theme.extend.colors to add our custom colors to Tailwind's defaults instead of replacing them
+- **Learnings**:
+  1. For critical CSS, standard CSS properties are more reliable than @apply directives in production builds
+  2. When migrating from Tailwind v3 to v4, it's often easier to use standard CSS than to fight with @apply
+  3. Always test production builds locally with the same environment variables that will be used in deployment
+  4. The safelist approach can work but becomes unwieldy when many utility classes are used
+  5. For maximum reliability, use Tailwind utility classes directly in HTML, not in CSS files with @apply

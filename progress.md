@@ -137,6 +137,9 @@ Fixed TypeScript compilation errors in the web app by adding React type definiti
 - Switched from using PostCSS for Tailwind processing to using the dedicated @tailwindcss/vite plugin for better performance and simpler configuration.
 - Fixed @tailwindcss/vite version mismatch by updating from 4.0.0 to 4.0.14 in both package.json and render.yaml to match the latest available version.
 - Fixed "unknown utility class" error by properly defining default colors (white, black, transparent) in tailwind.config.js to ensure compatibility with Tailwind v4.
+- Fixed Tailwind CSS utility class issues by moving custom colors to theme.extend.colors and explicitly specifying the tailwind config path in vite.simple.js.
+- Added TAILWIND_MODE=build environment variable to ensure Tailwind processes styles correctly during production builds.
+- Resolved Tailwind v4 compatibility issues by removing @apply directives from CSS and using standard CSS properties instead, which is more reliable in production builds.
 
 ## Fixes and Improvements
 

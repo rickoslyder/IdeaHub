@@ -2,31 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply text-neutral-800 antialiased;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-semibold;
-  }
+/* Base styles */
+body {
+  color: rgb(38 38 38); /* neutral-800 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer components {
-  .btn {
-    @apply px-4 py-2 rounded font-medium transition-colors;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600; /* equivalent to font-semibold */
+}
 
-  .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark;
-  }
+/* Component styles */
+.btn {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  border-radius: 0.25rem; /* rounded */
+  font-weight: 500; /* font-medium */
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 
-  .btn-secondary {
-    @apply bg-neutral-200 text-neutral-800 hover:bg-neutral-300;
-  }
+.btn-primary {
+  background-color: #3b82f6; /* bg-primary */
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb; /* bg-primary-dark */
+}
+
+.btn-secondary {
+  background-color: rgb(229 229 229); /* bg-neutral-200 */
+  color: rgb(38 38 38); /* text-neutral-800 */
+}
+
+.btn-secondary:hover {
+  background-color: rgb(212 212 212); /* bg-neutral-300 */
 }

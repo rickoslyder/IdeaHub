@@ -9,7 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default {
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss({
+      config: path.resolve(__dirname, "tailwind.config.js"),
+    }),
+  ],
   build: {
     outDir: "dist",
     emptyOutDir: true,
