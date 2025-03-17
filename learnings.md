@@ -467,4 +467,14 @@ return res.json(repoMetadata);
   2. Added `fileURLToPath` to handle `__dirname` in ES modules
   3. Updated all server-side JavaScript files (server.js, vite.simple.js) to use ES module syntax
   4. Used proper imports for third-party dependencies like express and @vitejs/plugin-react
-- **Reference**: [Node.js ECMAScript Modules](https://nodejs.org/api/esm.html#differences-between-es-modules-and-commonjs) 
+- **Reference**: [Node.js ECMAScript Modules](https://nodejs.org/api/esm.html#differences-between-es-modules-and-commonjs)
+
+### Issue: Tailwind v4 with PostCSS vs Vite Plugin
+- **Problem**: Error "It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin" when using Tailwind v4 with PostCSS.
+- **Cause**: In Tailwind CSS v4, the PostCSS plugin has been moved to a separate package (`@tailwindcss/postcss`), and direct usage of `tailwindcss` as a PostCSS plugin no longer works.
+- **Solution**:
+  1. Switched to using the dedicated Vite plugin (`@tailwindcss/vite`) instead of PostCSS for Tailwind processing
+  2. Removed postcss.config.js file since it's no longer needed
+  3. Updated Vite config files to use the Tailwind Vite plugin
+  4. Updated dependencies in package.json and render.yaml
+- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide#using-with-vite) 
