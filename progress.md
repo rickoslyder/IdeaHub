@@ -132,6 +132,8 @@ Fixed TypeScript compilation errors in the web app by adding React type definiti
 - Created a custom build script for the web app that explicitly installs Tailwind CSS and related dependencies to ensure they're available during the build process.
 - Created a migration script to update CSS classes from Tailwind v3 to v4, updating gray-* to neutral-* classes and configuring proper PostCSS support.
 - Updated render.yaml to remove @tailwindcss/postcss dependency and migrate-tailwind.js script since we've manually updated our codebase to be compatible with Tailwind v4.
+- Updated migrate-tailwind.js script to use ES module syntax instead of CommonJS to be compatible with the "type": "module" setting in package.json.
+- Updated server.js and vite.simple.js to use ES module syntax instead of CommonJS for consistent module handling across the web app.
 
 ## Fixes and Improvements
 

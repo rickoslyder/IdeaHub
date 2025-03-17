@@ -457,4 +457,14 @@ return res.json(repoMetadata);
   3. Updated color classes from `gray-*` to `neutral-*` in relevant components
   4. Properly defined colors in `tailwind.config.js` to ensure `primary` is available
   5. Updated render.yaml to remove unnecessary dependencies and scripts after manual migration
-- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide) 
+- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide)
+
+### Issue: ES Module Compatibility with Scripts
+- **Problem**: After adding `"type": "module"` to package.json, existing scripts using CommonJS `require()` stopped working with "require is not defined in ES module scope" errors.
+- **Cause**: Package.json's `"type": "module"` setting makes all .js files in the project be treated as ES modules by default.
+- **Solution**:
+  1. Converted the script to use ES module syntax (`import` instead of `require`)
+  2. Added `fileURLToPath` to handle `__dirname` in ES modules
+  3. Updated all server-side JavaScript files (server.js, vite.simple.js) to use ES module syntax
+  4. Used proper imports for third-party dependencies like express and @vitejs/plugin-react
+- **Reference**: [Node.js ECMAScript Modules](https://nodejs.org/api/esm.html#differences-between-es-modules-and-commonjs) 
