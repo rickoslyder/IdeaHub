@@ -436,3 +436,25 @@ return res.json(repoMetadata);
 4. **Model Consistency:** Ensure that all fields used in the code are properly defined in the model classes.
 
 5. **Express Route Handlers:** Always use explicit return statements in Express route handlers to ensure TypeScript can properly analyze code paths. 
+
+## Vite CJS Warning and Tailwind v4 Updates
+
+### Issue: Vite CJS Warning
+- **Problem**: Warning about Module type of file not being specified and not parsing as CommonJS.
+- **Cause**: Vite is moving away from CommonJS in favor of ESM, and the project was not properly configured to use ESM.
+- **Solution**: Added `"type": "module"` to `package.json` to specify ESM as the default module type.
+- **Reference**: [Vite Troubleshooting Guide](https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated)
+
+### Issue: Tailwind v4 Unknown Utility Class
+- **Problem**: Build error about unknown utility class `bg-primary` when building with Tailwind v4.
+- **Cause**: 
+  1. CSS import syntax was using the older `@import "tailwindcss"` format instead of the `@tailwind` directives
+  2. PostCSS configuration was using `@tailwindcss/postcss` instead of `tailwindcss`
+  3. The `gray-*` color references needed to be updated to `neutral-*` in Tailwind v4
+- **Solution**:
+  1. Updated `postcss.config.js` to use the correct plugin name: `tailwindcss: {}`
+  2. Changed CSS import syntax from `@import "tailwindcss"` to the standard `@tailwind` directives
+  3. Updated color classes from `gray-*` to `neutral-*` in relevant components
+  4. Properly defined colors in `tailwind.config.js` to ensure `primary` is available
+  5. Updated render.yaml to remove unnecessary dependencies and scripts after manual migration
+- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide) 
