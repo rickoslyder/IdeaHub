@@ -1,10 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   body {
-    @apply text-gray-800 antialiased;
+    @apply text-neutral-800 antialiased;
   }
 
   h1,
@@ -27,6 +25,6 @@
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+    @apply bg-neutral-200 text-neutral-800 hover:bg-neutral-300;
   }
 }
