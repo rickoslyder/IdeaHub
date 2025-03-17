@@ -477,4 +477,17 @@ return res.json(repoMetadata);
   2. Removed postcss.config.js file since it's no longer needed
   3. Updated Vite config files to use the Tailwind Vite plugin
   4. Updated dependencies in package.json and render.yaml
-- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide#using-with-vite) 
+- **Reference**: [Tailwind CSS v4 Upgrade Guide](https://tailwindcss.com/docs/upgrade-guide#using-with-vite)
+
+### Issue: Package Version Mismatch
+- **Problem**: Error "Cannot find package '@tailwindcss/vite' imported from vite.simple.js" despite the package being specified in the build command.
+- **Cause**: We were using version 4.0.0 in render.yaml and package.json, but the latest version was 4.0.14, causing compatibility issues.
+- **Solution**:
+  1. Checked the available versions using `npm view @tailwindcss/vite versions`
+  2. Updated the version in both render.yaml and package.json to 4.0.14
+  3. Ensured version consistency across all configuration files
+- **Learnings**:
+  1. Always verify package versions exist before specifying them
+  2. Use package version commands (`npm view [package] versions`) to check available versions
+  3. For rapidly evolving packages, it's safer to use exact versions rather than semver ranges
+  4. Keep dependencies in sync between local development and deployment environments 

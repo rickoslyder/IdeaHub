@@ -135,6 +135,7 @@ Fixed TypeScript compilation errors in the web app by adding React type definiti
 - Updated migrate-tailwind.js script to use ES module syntax instead of CommonJS to be compatible with the "type": "module" setting in package.json.
 - Updated server.js and vite.simple.js to use ES module syntax instead of CommonJS for consistent module handling across the web app.
 - Switched from using PostCSS for Tailwind processing to using the dedicated @tailwindcss/vite plugin for better performance and simpler configuration.
+- Fixed @tailwindcss/vite version mismatch by updating from 4.0.0 to 4.0.14 in both package.json and render.yaml to match the latest available version.
 
 ## Fixes and Improvements
 
