@@ -1,36 +1,29 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import Projects from './pages/Projects'
-import SearchResults from './pages/SearchResults'
-import { Link } from 'react-router-dom'
-
-const App: React.FC = () => {
+function App() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <header className="bg-white shadow">
-                <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 flex justify-between items-center">
-                    <h1 className="text-xl font-bold text-indigo-600">
-                        <Link to="/">Idea Hub</Link>
-                    </h1>
-                    <nav className="flex space-x-4">
-                        <Link to="/" className="text-gray-600 hover:text-gray-900">Home</Link>
-                        <Link to="/projects" className="text-gray-600 hover:text-gray-900">Projects</Link>
-                        <Link to="/search" className="text-gray-600 hover:text-gray-900">Search</Link>
-                    </nav>
+        <div className="bg-slate-100 min-h-screen text-neutral-800 p-8 font-sans">
+            <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg">
+                <div className="text-center">
+                    <h1 className="text-4xl font-bold text-blue-600 mb-4">Idea Hub</h1>
+                    <p className="text-xl mb-8">Manage and visualize your projects with AI-powered relevance matching.</p>
                 </div>
-            </header>
 
-            <main>
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/search" element={<SearchResults />} />
-                    {/* Add more routes as needed */}
-                </Routes>
-            </main>
+                <div className="border border-neutral-200 rounded-lg p-6 mb-4">
+                    <h2 className="text-2xl font-semibold mb-2">Project Management</h2>
+                    <p>Create, view, and organize projects with tagging and status tracking</p>
+                </div>
+
+                <div className="border border-neutral-200 rounded-lg p-6 mb-4">
+                    <h2 className="text-2xl font-semibold mb-2">Integrations</h2>
+                    <p>Link GitHub repositories and local folders to your projects</p>
+                </div>
+
+                <div className="border border-neutral-200 rounded-lg p-6">
+                    <h2 className="text-2xl font-semibold mb-2">AI-Powered Matching</h2>
+                    <p>Find relevant projects for new developments and vice versa</p>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 
-export default App 
+export default App; 

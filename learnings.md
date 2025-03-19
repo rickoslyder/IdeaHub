@@ -557,3 +557,30 @@ return res.json(repoMetadata);
   3. For worker services that don't need all models, consider a simplified approach that avoids the model imports
   4. The `createRequire` function is essential for hybrid ESM/CommonJS applications
   5. For complex ORM setups, consider keeping them in CommonJS format or using dynamic imports
+
+### Issue: "process is not defined" in browser environment
+- **Problem**: Received error "Uncaught ReferenceError: process is not defined" in the WindowContextProvider component.
+- **Cause**: 
+  1. Node.js specific code was running in a browser environment
+  2. `process.platform` was being accessed in WindowContext.tsx, but `process` doesn't exist in browser
+- **Solution**:
+  1. Created a browser-safe platform detection function using `navigator.userAgent`
+  2. Replaced direct access to `process.platform` with this function
+- **Learnings**:
+  1. Always check for environment-specific code when building cross-platform applications
+  2. Use feature detection and fallbacks instead of assuming environment globals
+  3. For Electron apps, be careful about what code runs in the renderer vs the main process
+
+### Issue: TypeScript module resolution for ESM packages
+- **Problem**: TypeScript error "Cannot find module '@tailwindcss/vite'" despite the package being installed
+- **Cause**: 
+  1. The package uses `.mts` extension for its type declarations
+  2. This requires specific TypeScript moduleResolution settings
+- **Solution**:
+  1. Created a custom type declaration file for `@tailwindcss/vite` 
+  2. Added `typeRoots` configuration to tsconfig.json
+  3. Added basic plugin type definition matching the Vite plugin interface
+- **Learnings**:
+  1. Newer packages may use ESM-only type declarations that require updated TypeScript settings
+  2. Creating custom type declarations can be faster than reconfiguring the entire project
+  3. Check the package's source to understand what interface you need to define

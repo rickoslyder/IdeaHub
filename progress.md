@@ -141,6 +141,10 @@ Fixed TypeScript compilation errors in the web app by adding React type definiti
 - Added TAILWIND_MODE=build environment variable to ensure Tailwind processes styles correctly during production builds.
 - Resolved Tailwind v4 compatibility issues by removing @apply directives from CSS and using standard CSS properties instead, which is more reliable in production builds.
 - Fixed worker service circular dependency error by creating a simplified worker.js that avoids model imports and uses createRequire to handle ESM/CommonJS interoperability.
+- Fixed "process is not defined" error in WindowContextProvider by replacing Node.js-specific code with browser-safe platform detection.
+- Resolved TypeScript module resolution issue for @tailwindcss/vite by creating a custom type declaration file in the web app.
+- Fixed styling issues in the web app by simplifying the App component and using explicit Tailwind classes.
+- Added debugging tools to both web and Electron apps to help diagnose rendering issues.
 
 ## Fixes and Improvements
 
