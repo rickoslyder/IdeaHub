@@ -140,6 +140,7 @@ Fixed TypeScript compilation errors in the web app by adding React type definiti
 - Fixed Tailwind CSS utility class issues by moving custom colors to theme.extend.colors and explicitly specifying the tailwind config path in vite.simple.js.
 - Added TAILWIND_MODE=build environment variable to ensure Tailwind processes styles correctly during production builds.
 - Resolved Tailwind v4 compatibility issues by removing @apply directives from CSS and using standard CSS properties instead, which is more reliable in production builds.
+- Fixed worker service circular dependency error by creating a simplified worker.js that avoids model imports and uses createRequire to handle ESM/CommonJS interoperability.
 
 ## Fixes and Improvements
 

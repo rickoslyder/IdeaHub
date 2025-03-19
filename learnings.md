@@ -539,3 +539,21 @@ return res.json(repoMetadata);
   3. Always test production builds locally with the same environment variables that will be used in deployment
   4. The safelist approach can work but becomes unwieldy when many utility classes are used
   5. For maximum reliability, use Tailwind utility classes directly in HTML, not in CSS files with @apply
+
+### Issue: ES Module Circular Dependencies with Sequelize
+- **Problem**: Worker service was failing with `Error [ERR_REQUIRE_CYCLE_MODULE]` when trying to load models in an ES Module context.
+- **Cause**: 
+  1. Circular dependencies between model files (e.g., Development model referencing Project model and vice versa)
+  2. Sequelize-TypeScript using CommonJS `require()` to load ES modules in a circular pattern
+  3. Node.js v22+ enforcing stricter ES module loading rules
+- **Solution**:
+  1. Created a simplified worker.js that avoids importing the model files directly
+  2. Used `createRequire` from 'module' to load CommonJS modules from ES modules
+  3. Set up a direct Sequelize connection instead of using the model imports
+  4. Added fallback mechanisms for different database connection methods
+- **Learnings**:
+  1. When migrating from CommonJS to ESM, circular dependencies that worked in CommonJS may break
+  2. Sequelize-TypeScript has particular issues with ES modules due to its internal use of `require()`
+  3. For worker services that don't need all models, consider a simplified approach that avoids the model imports
+  4. The `createRequire` function is essential for hybrid ESM/CommonJS applications
+  5. For complex ORM setups, consider keeping them in CommonJS format or using dynamic imports

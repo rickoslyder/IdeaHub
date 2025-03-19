@@ -1,54 +1,104 @@
-import dotenv from "dotenv";
-import { testConnection } from "./src/config/database.js";
+// ESM wrapper for CommonJS compatibility
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import fs from "fs";
 
-// Load environment variables
-dotenv.config();
+// Create __dirname equivalent in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// Import necessary modules
-import { sequelize } from "./src/models/index.js";
+// Set up require for CommonJS modules
+const require = createRequire(import.meta.url);
 
-/**
- * Worker to handle background tasks
- * - Process embedding generation queue
- * - Handle periodic tasks
- * - Process relevance calculations
- */
-async function startWorker() {
-  console.log("Starting background worker...");
+console.log("Starting worker service...");
+console.log("NODE_ENV:", process.env.NODE_ENV);
 
-  try {
-    // Test database connection
-    const connected = await testConnection();
-    if (!connected) {
-      console.error("Failed to connect to the database");
-      process.exit(1);
-    }
+// Manually set up database connection instead of using models directly
+// This avoids the circular dependency issues
+const { Sequelize } = require("sequelize");
 
-    // Set up periodic tasks here
-    setInterval(async () => {
-      try {
-        console.log("Running periodic task...");
+// Database connection logic
+console.log("Starting database configuration");
 
-        // Example task: Find items that need embedding generation
+let dbConfig = {};
+let sequelize = null;
 
-        // In a real implementation we would:
-        // 1. Find items in the database that need processing
-        // 2. Send them to the AI service for embedding generation
-        // 3. Store the embeddings in the vector database
-        // 4. Update the items in the database
+try {
+  // Check which db connection method to use
+  if (process.env.DATABASE_URL) {
+    console.log("DATABASE_URL exists: true");
+    console.log("NODE_ENV:", process.env.NODE_ENV);
+    console.log(
+      "Using DATABASE_URL:",
+      process.env.DATABASE_URL.replace(/:[^:]*@/, ":****@")
+    );
 
-        console.log("Periodic task completed");
-      } catch (error) {
-        console.error("Error in periodic task:", error);
-      }
-    }, 60000); // Run every minute
+    // Use DATABASE_URL for connection
+    sequelize = new Sequelize(process.env.DATABASE_URL, {
+      dialect: "postgres",
+      logging: process.env.NODE_ENV === "production" ? false : console.log,
+      dialectOptions: {
+        ssl:
+          process.env.NODE_ENV === "production"
+            ? {
+                require: true,
+                rejectUnauthorized: false,
+              }
+            : false,
+      },
+    });
+  } else {
+    // Fallback to individual connection parameters
+    console.log("Using individual connection parameters");
 
-    console.log("Worker started successfully");
-  } catch (error) {
-    console.error("Worker startup error:", error);
-    process.exit(1);
+    const host = process.env.RENDER_DB_SERVICE_HOSTNAME || "localhost";
+    const port = process.env.RENDER_DB_SERVICE_PORT || 5432;
+    const username = process.env.RENDER_DB_SERVICE_USER || "postgres";
+    const password = process.env.RENDER_DB_SERVICE_PASSWORD || "postgres";
+    const database = process.env.RENDER_DB_SERVICE_DATABASE || "idea_hub_db";
+
+    sequelize = new Sequelize(database, username, password, {
+      host,
+      port,
+      dialect: "postgres",
+      logging: process.env.NODE_ENV === "production" ? false : console.log,
+      dialectOptions: {
+        ssl:
+          process.env.NODE_ENV === "production"
+            ? {
+                require: true,
+                rejectUnauthorized: false,
+              }
+            : false,
+      },
+    });
   }
-}
 
-// Start the worker
-startWorker();
+  // Test the connection
+  await sequelize.authenticate();
+  console.log("Database connection established successfully.");
+
+  // Define a simplified worker process
+  const runWorker = async () => {
+    try {
+      console.log("Worker started. Processing tasks...");
+
+      // For now, just log a message every 30 seconds
+      // In the future, this would handle background tasks
+      setInterval(() => {
+        console.log(
+          "Worker heartbeat. Still running at:",
+          new Date().toISOString()
+        );
+      }, 30000);
+    } catch (error) {
+      console.error("Error in worker process:", error);
+    }
+  };
+
+  // Start the worker
+  runWorker();
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
+}
